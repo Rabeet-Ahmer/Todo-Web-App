@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OPERATOR - Neo-Brutalist Task Management</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Roboto+Mono:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f4252f",
+              "obsidian": "#050505",
+              "charcoal": "#1a1a1a",
+              "border-dark": "#333333",
+              "acid-green": "#ccff00",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"],
+              "mono": ["Roboto Mono", "monospace"],
+            },
+            borderRadius: {
+                "none": "0px",
+                "DEFAULT": "0px",
+                "lg": "0px",
+                "xl": "0px",
+                "full": "0px",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Force zero border radius for strict brutalist look as requested */
+        * {
+            border-radius: 0 !important;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4252f; 
+        }
+
+        /* Glitch effect utility for hover */
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #f4252f;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        
+        .grid-bg {
+            background-image: 
+                linear-gradient(to right, #1a1a1a 1px, transparent 1px),
+                linear-gradient(to bottom, #1a1a1a 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-white font-display antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+<div class="relative min-h-screen flex flex-col border-x border-border-dark max-w-[1440px] mx-auto shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+<!-- Navbar -->
+<header class="sticky top-0 z-50 bg-obsidian/95 backdrop-blur-sm border-b border-border-dark">
+<div class="flex items-center justify-between px-6 py-4 md:px-10">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary flex items-center justify-center text-black">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+</div>
+<h2 class="text-xl font-bold tracking-widest uppercase">Operator<span class="text-primary">.</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-1">
+<a class="px-6 py-2 text-xs font-mono text-gray-400 hover:text-primary hover:bg-charcoal transition-colors border border-transparent hover:border-border-dark uppercase tracking-widest" href="#">Modules</a>
+<a class="px-6 py-2 text-xs font-mono text-gray-400 hover:text-primary hover:bg-charcoal transition-colors border border-transparent hover:border-border-dark uppercase tracking-widest" href="#">Protocol</a>
+<a class="px-6 py-2 text-xs font-mono text-gray-400 hover:text-primary hover:bg-charcoal transition-colors border border-transparent hover:border-border-dark uppercase tracking-widest" href="#">Manifesto</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 text-[10px] font-mono text-gray-500">
+<span class="w-2 h-2 bg-green-500 animate-pulse"></span>
+                        SYSTEM ONLINE
+                    </div>
+<button class="bg-primary text-white text-xs font-bold px-6 py-3 uppercase tracking-widest hover:bg-white hover:text-black transition-colors border border-transparent">
+                        Login_
+                    </button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<main class="flex-grow">
+<div class="grid grid-cols-1 lg:grid-cols-12 min-h-[600px] border-b border-border-dark">
+<!-- Hero Content -->
+<div class="lg:col-span-7 flex flex-col justify-center p-8 md:p-16 lg:p-24 border-b lg:border-b-0 lg:border-r border-border-dark bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+<div class="mb-4 inline-flex border border-primary/30 bg-primary/10 px-3 py-1 w-fit">
+<p class="font-mono text-[10px] text-primary tracking-widest uppercase">v2.4.0 Release Stable</p>
+</div>
+<h1 class="text-5xl md:text-7xl font-bold leading-[0.9] tracking-tighter mb-6 uppercase">
+                        Execute Tasks.<br/>
+<span class="text-primary">Zero Latency.</span>
+</h1>
+<p class="font-mono text-sm md:text-base text-gray-400 max-w-lg mb-10 leading-relaxed">
+                        // The precision tool for the modern operator. Absolute clarity for your daily objectives. No distractions. Pure output.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-white text-black text-sm font-bold px-8 py-4 uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 group">
+                            Initialize System 
+                            <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="border border-border-dark bg-charcoal text-white text-sm font-bold px-8 py-4 uppercase tracking-widest hover:bg-border-dark transition-colors font-mono">
+                            View_Demo
+                        </button>
+</div>
+</div>
+<!-- Hero Visual / Decoration -->
+<div class="lg:col-span-5 relative bg-charcoal grid-bg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-obsidian/80 pointer-events-none z-10"></div>
+<!-- Abstract Dashboard Image -->
+<div class="w-full h-full relative group">
+<img class="w-full h-full object-cover opacity-60 mix-blend-luminosity grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Abstract futuristic cybersecurity interface with data streams" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-ZeObEnhZZjSbdWoEXdTG3F98A1dhpwkilRP3lzVN1Wdqgb6xV_WDLyuQSFhzLDpewZQGsqFYWOLcVX4RzeAR2FJtYoyiVLYCKkIwL5lgobGyfQU3I9JHezH46jgRPlCBX2_uVJfCAsRtlxwbiJonPSeikNqJJU5S-XJu4NN1evGrbw1zW4vdsyFPFqGz3ylYrxM2Q7CvWR0FzSX8vN_qbrQNQlswpSX0QE0WM6KS3L8cf4ybUezOF6GPLiasVl_gdeAR6cONOr0l"/>
+<div class="absolute inset-0 border-[1px] border-primary/20 m-8 z-20 flex flex-col justify-between p-4">
+<div class="flex justify-between font-mono text-[10px] text-primary">
+<span>SECURE_CONNECTION</span>
+<span>42ms</span>
+</div>
+<div class="flex justify-between font-mono text-[10px] text-primary">
+<span>ENCRYPTED</span>
+<span>SYNC_ACTIVE</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats Ticker -->
+<div class="border-b border-border-dark bg-charcoal overflow-hidden">
+<div class="flex whitespace-nowrap py-3">
+<div class="animate-marquee flex gap-12 items-center font-mono text-xs text-gray-400 uppercase tracking-widest">
+<span class="flex items-center gap-2"><span class="text-primary">///</span> OPERATORS: 10,420</span>
+<span class="flex items-center gap-2"><span class="text-primary">///</span> TASKS_EXECUTED: 4,500,291</span>
+<span class="flex items-center gap-2"><span class="text-primary">///</span> UPTIME: 99.99%</span>
+<span class="flex items-center gap-2"><span class="text-primary">///</span> REGION: GLOBAL</span>
+<!-- Duplicate for seamless loop -->
+<span class="flex items-center gap-2"><span class="text-primary">///</span> OPERATORS: 10,420</span>
+<span class="flex items-center gap-2"><span class="text-primary">///</span> TASKS_EXECUTED: 4,500,291</span>
+<span class="flex items-center gap-2"><span class="text-primary">///</span> UPTIME: 99.99%</span>
+<span class="flex items-center gap-2"><span class="text-primary">///</span> REGION: GLOBAL</span>
+</div>
+</div>
+</div>
+<!-- Features Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 border-b border-border-dark">
+<!-- Feature 1 -->
+<div class="group border-b md:border-b-0 md:border-r border-border-dark p-10 bg-obsidian hover:bg-charcoal transition-colors relative overflow-hidden">
+<div class="absolute top-4 right-4 text-border-dark group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-4xl">visibility_off</span>
+</div>
+<div class="mt-20">
+<h3 class="text-xl font-bold uppercase mb-3 group-hover:translate-x-1 transition-transform">Focus_Mode</h3>
+<p class="font-mono text-xs text-gray-500 leading-relaxed border-l-2 border-border-dark pl-4 group-hover:border-primary transition-colors">
+                            Distraction-free UI environment engineered for deep work sessions. Toggle visibility of non-essential metrics.
+                        </p>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="group border-b md:border-b-0 md:border-r border-border-dark p-10 bg-obsidian hover:bg-charcoal transition-colors relative overflow-hidden">
+<div class="absolute top-4 right-4 text-border-dark group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-4xl">terminal</span>
+</div>
+<div class="mt-20">
+<h3 class="text-xl font-bold uppercase mb-3 group-hover:translate-x-1 transition-transform">Keyboard_First</h3>
+<p class="font-mono text-xs text-gray-500 leading-relaxed border-l-2 border-border-dark pl-4 group-hover:border-primary transition-colors">
+                            Full command line efficiency. Navigate, create, and complete tasks without ever touching a mouse.
+                        </p>
+</div>
+</div>
+<!-- Feature 3 -->
+<div class="group p-10 bg-obsidian hover:bg-charcoal transition-colors relative overflow-hidden">
+<div class="absolute top-4 right-4 text-border-dark group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-4xl">lock</span>
+</div>
+<div class="mt-20">
+<h3 class="text-xl font-bold uppercase mb-3 group-hover:translate-x-1 transition-transform">Encrypted_Sync</h3>
+<p class="font-mono text-xs text-gray-500 leading-relaxed border-l-2 border-border-dark pl-4 group-hover:border-primary transition-colors">
+                            Zero-knowledge encryption protocol. Your data is obfuscated before it leaves your local machine.
+                        </p>
+</div>
+</div>
+</div>
+<!-- System Status / Progress Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]">
+<!-- Left: Text Context -->
+<div class="p-10 lg:p-20 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-border-dark">
+<h2 class="text-3xl md:text-4xl font-bold uppercase mb-6">System Capabilities</h2>
+<p class="font-mono text-sm text-gray-400 mb-8 max-w-md">
+                        Our infrastructure scales with your productivity. Visualizing current system load and optimization metrics.
+                    </p>
+<ul class="font-mono text-xs space-y-4 text-gray-500">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>OFFLINE_MODE_SUPPORTED</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>API_ACCESS_GRANTED</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>PLUGIN_ARCHITECTURE_READY</span>
+</li>
+</ul>
+</div>
+<!-- Right: Status Bars -->
+<div class="bg-charcoal p-10 lg:p-20 flex flex-col justify-center gap-8 border-b border-border-dark lg:border-none">
+<!-- Stat 1 -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-xs font-mono font-bold uppercase tracking-widest text-white">
+<span>Processing_Speed</span>
+<span class="text-primary">OPTIMAL</span>
+</div>
+<div class="h-4 w-full bg-obsidian border border-border-dark p-[2px]">
+<div class="h-full bg-primary w-[92%] relative overflow-hidden">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-20"></div>
+</div>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-xs font-mono font-bold uppercase tracking-widest text-white">
+<span>Server_Load</span>
+<span class="text-green-500">24%</span>
+</div>
+<div class="h-4 w-full bg-obsidian border border-border-dark p-[2px]">
+<div class="h-full bg-white w-[24%] relative overflow-hidden"></div>
+</div>
+</div>
+<!-- Stat 3 -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-xs font-mono font-bold uppercase tracking-widest text-white">
+<span>Storage_Capacity</span>
+<span class="text-gray-400">UNLIMITED</span>
+</div>
+<div class="h-4 w-full bg-obsidian border border-border-dark p-[2px]">
+<div class="h-full bg-gray-600 w-[65%] relative overflow-hidden"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<div class="bg-primary py-24 px-6 text-center border-t border-b border-border-dark relative overflow-hidden group">
+<!-- Decorative grid overlay -->
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/grid-me.png')] opacity-10"></div>
+<div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-8">
+<span class="material-symbols-outlined text-6xl text-black">bolt</span>
+<h2 class="text-4xl md:text-6xl font-black uppercase text-black tracking-tight">
+                        Ready to Execute?
+                    </h2>
+<p class="font-mono text-black/80 text-sm md:text-base max-w-lg mx-auto">
+                        Join the elite operators using our protocol to dominate their workflow.
+                    </p>
+<div class="flex flex-col sm:flex-row w-full max-w-md gap-0 shadow-2xl">
+<input class="flex-1 bg-black text-white px-6 py-4 font-mono text-sm border-none focus:ring-2 focus:ring-white placeholder:text-gray-600 outline-none uppercase" placeholder="ENTER_EMAIL_ADDRESS" type="email"/>
+<button class="bg-white text-black font-bold uppercase px-8 py-4 hover:bg-black hover:text-white transition-colors text-sm tracking-widest border-l border-black sm:border-l-0">
+                            Deploy -&gt;
+                        </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-obsidian pt-16 pb-8 px-6 md:px-12 border-t border-border-dark">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+<div class="flex flex-col gap-4">
+<h4 class="font-mono text-xs text-gray-500 uppercase tracking-widest mb-2">Platform</h4>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Download</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Changelog</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Status</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-mono text-xs text-gray-500 uppercase tracking-widest mb-2">Company</h4>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Manifesto</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Careers</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Contact</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-mono text-xs text-gray-500 uppercase tracking-widest mb-2">Legal</h4>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Privacy</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Terms</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Security</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-mono text-xs text-gray-500 uppercase tracking-widest mb-2">Social</h4>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Twitter / X</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">GitHub</a>
+<a class="text-sm font-bold hover:text-primary uppercase" href="#">Discord</a>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-border-dark font-mono text-[10px] text-gray-600 uppercase tracking-widest">
+<p>© 2024 Operator Systems Inc. All rights reserved.</p>
+<div class="flex gap-4 mt-4 md:mt-0">
+<span>System_ID: 884-29X</span>
+<span>Lat: 40.7128</span>
+</div>
+</div>
+</footer>
+</div>
+<style>
+        .animate-marquee {
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</body></html>

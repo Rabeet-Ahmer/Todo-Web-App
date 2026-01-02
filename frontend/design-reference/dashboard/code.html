@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS_OS // Task Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4252f",
+                        "obsidian": "#050505",
+                        "charcoal": "#121212",
+                        "border-subtle": "#2a2a2a",
+                        "border-sharp": "#444444",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "none": "0px",
+                        "sm": "0px", 
+                        "md": "0px",
+                        "lg": "0px", 
+                        "xl": "0px", 
+                        "full": "0px", // Overriding all radius to 0 as requested
+                    },
+                    borderWidth: {
+                        "1": "1px",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for that raw, mechanical feel */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4252f; 
+        }
+        
+        /* Utility for sharp outlines */
+        .sharp-border {
+            border: 1px solid #2a2a2a;
+        }
+        
+        /* Grid background pattern */
+        .bg-grid-pattern {
+            background-image: linear-gradient(#1a1a1a 1px, transparent 1px), linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-white font-display overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="h-16 border-b border-border-sharp bg-charcoal flex items-center justify-between px-6 z-20 relative">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-lg">terminal</span>
+</div>
+<h1 class="text-xl font-bold tracking-widest uppercase text-white">NEXUS_OS <span class="text-primary">//</span> DASHBOARD</h1>
+</div>
+<div class="hidden md:flex flex-1 max-w-xl mx-8 h-10 relative">
+<div class="absolute left-0 top-0 h-full w-10 flex items-center justify-center text-gray-500 border border-r-0 border-border-subtle bg-obsidian">
+<span class="material-symbols-outlined text-sm">search</span>
+</div>
+<input class="w-full bg-obsidian border border-border-subtle text-sm font-mono text-gray-300 pl-12 pr-4 h-full focus:outline-none focus:border-primary focus:ring-0 placeholder-gray-600 uppercase tracking-wide" placeholder="SEARCH_DATABASE..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 font-mono text-xs text-gray-400">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-green-500 animate-pulse"></span>
+<span>SYS_ONLINE</span>
+</div>
+<div>v.4.0.2</div>
+</div>
+<div class="w-10 h-10 border border-border-subtle bg-obsidian flex items-center justify-center hover:bg-primary/20 hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-gray-300">notifications</span>
+</div>
+<div class="w-10 h-10 border border-border-subtle bg-cover bg-center" data-alt="User profile avatar abstract geometric" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4rVGxCF44o5gnfPgNGe0LC6mQonOulEQigd5Od8l_mvNdpqMrBzf7vDAKNs1CDw2znb8ICo3rX-BI3fGTiX_a2pU93DHdkSq8y1Ga0zsaRsWM0BIsKEizl1QSbGRfIIyK5pGOz0bQRHqur8Vq7tuDlbqtgpcxRNhbdI-tKBZXH5UgQQB55ttKAmRnJqWOEJ_aDxE1HPnQhev66dygctKa5s--f73T_Q1DBOTMTqkgypZnXOqU8q1-5WKEuIv6M2ui7qOZTy_OAWbe');"></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-20 lg:w-64 bg-charcoal border-r border-border-subtle flex flex-col justify-between hidden sm:flex">
+<div class="flex flex-col">
+<nav class="flex flex-col">
+<a class="flex items-center gap-4 p-5 border-b border-border-subtle bg-primary/10 text-primary border-l-4 border-l-primary transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-bold tracking-wider text-sm hidden lg:block">OVERVIEW</span>
+</a>
+<a class="flex items-center gap-4 p-5 border-b border-border-subtle text-gray-400 hover:bg-white/5 hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">task</span>
+<span class="font-medium tracking-wider text-sm hidden lg:block">OPERATIONS</span>
+</a>
+<a class="flex items-center gap-4 p-5 border-b border-border-subtle text-gray-400 hover:bg-white/5 hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">folder_open</span>
+<span class="font-medium tracking-wider text-sm hidden lg:block">ARCHIVES</span>
+</a>
+<a class="flex items-center gap-4 p-5 border-b border-border-subtle text-gray-400 hover:bg-white/5 hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-white">monitoring</span>
+<span class="font-medium tracking-wider text-sm hidden lg:block">METRICS</span>
+</a>
+</nav>
+</div>
+<div class="p-5 border-t border-border-subtle">
+<a class="flex items-center gap-4 text-gray-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium tracking-wider text-sm hidden lg:block">CONFIG</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col lg:flex-row bg-grid-pattern relative overflow-hidden">
+<!-- Overlay for grid fade -->
+<div class="absolute inset-0 bg-gradient-to-b from-obsidian/80 via-transparent to-obsidian pointer-events-none"></div>
+<!-- Central Task Feed -->
+<section class="flex-1 flex flex-col overflow-y-auto relative z-10 border-r border-border-subtle">
+<!-- Command Input Header -->
+<div class="p-8 pb-4">
+<h2 class="text-3xl font-bold mb-6 tracking-tight">ACTIVE_PROTOCOL</h2>
+<div class="relative group">
+<div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-gray-600 opacity-30 blur-[2px] transition duration-200 group-hover:opacity-70"></div>
+<div class="relative flex bg-charcoal border border-border-sharp p-1 items-stretch h-16">
+<div class="w-12 flex items-center justify-center text-primary font-mono text-xl select-none">&gt;</div>
+<input autofocus="" class="flex-1 bg-transparent border-none text-white placeholder-gray-600 focus:ring-0 text-lg font-mono" placeholder="INITIATE NEW TASK SEQUENCE..." type="text"/>
+<button class="bg-primary text-white px-6 hover:bg-red-600 transition-colors font-bold tracking-wider text-sm flex items-center gap-2">
+<span>EXECUTE</span>
+<span class="material-symbols-outlined text-sm">keyboard_return</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Priority Queue -->
+<div class="px-8 py-4">
+<div class="flex items-center justify-between mb-4 border-b border-border-subtle pb-2">
+<h3 class="text-primary font-mono text-sm tracking-widest uppercase font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-base">warning</span>
+                            IMMEDIATE_ACTION
+                        </h3>
+<span class="text-xs font-mono text-gray-500">QUEUE_SIZE: 03</span>
+</div>
+<div class="space-y-3">
+<!-- Task Card 1 -->
+<div class="group bg-charcoal border border-border-sharp p-0 hover:border-white transition-colors cursor-pointer flex">
+<div class="w-16 bg-obsidian border-r border-border-sharp flex items-center justify-center font-mono text-2xl font-bold text-gray-600 group-hover:text-white group-hover:bg-primary group-hover:border-primary transition-all">
+                                01
+                            </div>
+<div class="flex-1 p-4 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-lg font-bold text-white group-hover:text-primary transition-colors">System Diagnostics Check</h4>
+<span class="text-xs font-mono border border-primary text-primary px-2 py-0.5 uppercase">Critical</span>
+</div>
+<div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+<span>// SERVER_MAIN</span>
+<span>T-MINUS 2H</span>
+</div>
+</div>
+<div class="w-16 border-l border-border-sharp flex items-center justify-center">
+<button class="w-6 h-6 border border-gray-600 hover:bg-primary hover:border-primary transition-all"></button>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="group bg-charcoal border border-border-sharp p-0 hover:border-white transition-colors cursor-pointer flex">
+<div class="w-16 bg-obsidian border-r border-border-sharp flex items-center justify-center font-mono text-2xl font-bold text-gray-600 group-hover:text-white group-hover:bg-primary group-hover:border-primary transition-all">
+                                02
+                            </div>
+<div class="flex-1 p-4 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Update Security Protocols</h4>
+<span class="text-xs font-mono border border-gray-600 text-gray-400 px-2 py-0.5 uppercase">High</span>
+</div>
+<div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+<span>// NETWORK_SEC</span>
+<span>T-MINUS 4H</span>
+</div>
+</div>
+<div class="w-16 border-l border-border-sharp flex items-center justify-center">
+<button class="w-6 h-6 border border-gray-600 hover:bg-primary hover:border-primary transition-all"></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Queue -->
+<div class="px-8 py-4 flex-1">
+<div class="flex items-center justify-between mb-4 border-b border-border-subtle pb-2">
+<h3 class="text-white font-mono text-sm tracking-widest uppercase font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-base">calendar_today</span>
+                            SCHEDULED_OPS
+                        </h3>
+<span class="text-xs font-mono text-gray-500">QUEUE_SIZE: 12</span>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+<!-- Compact Task Card 3 -->
+<div class="bg-charcoal/50 border border-border-subtle p-3 hover:border-gray-500 transition-colors flex items-center gap-3">
+<div class="w-4 h-4 border border-gray-600 hover:bg-primary cursor-pointer"></div>
+<div class="flex-1">
+<p class="font-medium text-sm text-gray-300">Database Migration - Phase 1</p>
+<p class="font-mono text-[10px] text-gray-600 uppercase">Tomorrow, 0900</p>
+</div>
+<span class="text-[10px] font-mono text-gray-500">#DEV</span>
+</div>
+<!-- Compact Task Card 4 -->
+<div class="bg-charcoal/50 border border-border-subtle p-3 hover:border-gray-500 transition-colors flex items-center gap-3">
+<div class="w-4 h-4 border border-gray-600 hover:bg-primary cursor-pointer"></div>
+<div class="flex-1">
+<p class="font-medium text-sm text-gray-300">Client UI Review</p>
+<p class="font-mono text-[10px] text-gray-600 uppercase">Tomorrow, 1400</p>
+</div>
+<span class="text-[10px] font-mono text-gray-500">#DESIGN</span>
+</div>
+<!-- Compact Task Card 5 -->
+<div class="bg-charcoal/50 border border-border-subtle p-3 hover:border-gray-500 transition-colors flex items-center gap-3">
+<div class="w-4 h-4 border border-gray-600 hover:bg-primary cursor-pointer"></div>
+<div class="flex-1">
+<p class="font-medium text-sm text-gray-300">Weekly Sync</p>
+<p class="font-mono text-[10px] text-gray-600 uppercase">WED, 1000</p>
+</div>
+<span class="text-[10px] font-mono text-gray-500">#TEAM</span>
+</div>
+<!-- Compact Task Card 6 -->
+<div class="bg-charcoal/50 border border-border-subtle p-3 hover:border-gray-500 transition-colors flex items-center gap-3">
+<div class="w-4 h-4 border border-gray-600 hover:bg-primary cursor-pointer"></div>
+<div class="flex-1">
+<p class="font-medium text-sm text-gray-300">Deploy Hotfix v4.0.3</p>
+<p class="font-mono text-[10px] text-gray-600 uppercase">THU, 1200</p>
+</div>
+<span class="text-[10px] font-mono text-gray-500">#OPS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Analytics Panel -->
+<aside class="w-full lg:w-80 bg-charcoal border-l border-border-subtle relative z-20 flex flex-col">
+<div class="p-6 border-b border-border-subtle">
+<h3 class="text-xs font-mono text-gray-500 mb-2 uppercase tracking-widest">Efficiency_Index</h3>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-bold text-white">94.2</span>
+<span class="text-lg text-primary font-mono mb-1">%</span>
+</div>
+<div class="w-full h-1 bg-gray-800 mt-4 overflow-hidden">
+<div class="h-full bg-primary w-[94%]"></div>
+</div>
+</div>
+<div class="p-6 border-b border-border-subtle flex-1 flex flex-col">
+<h3 class="text-xs font-mono text-gray-500 mb-6 uppercase tracking-widest">Velocity_Graph</h3>
+<!-- SVG Chart -->
+<div class="flex-1 min-h-[150px] relative w-full">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 300 150">
+<!-- Grid lines -->
+<line stroke="#222" stroke-width="1" x1="0" x2="300" y1="0" y2="0"></line>
+<line stroke="#222" stroke-width="1" x1="0" x2="300" y1="37.5" y2="37.5"></line>
+<line stroke="#222" stroke-width="1" x1="0" x2="300" y1="75" y2="75"></line>
+<line stroke="#222" stroke-width="1" x1="0" x2="300" y1="112.5" y2="112.5"></line>
+<line stroke="#222" stroke-width="1" x1="0" x2="300" y1="150" y2="150"></line>
+<!-- Polygon Data -->
+<polygon fill="rgba(244, 37, 47, 0.1)" points="0,120 50,90 100,100 150,40 200,60 250,20 300,50 300,150 0,150"></polygon>
+<polyline fill="none" points="0,120 50,90 100,100 150,40 200,60 250,20 300,50" stroke="#f4252f" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+<!-- Data Points -->
+<rect fill="#fff" height="4" width="4" x="48" y="88"></rect>
+<rect fill="#fff" height="4" width="4" x="148" y="38"></rect>
+<rect fill="#fff" height="4" width="4" x="248" y="18"></rect>
+</svg>
+</div>
+<div class="flex justify-between text-[10px] font-mono text-gray-600 mt-2">
+<span>MON</span>
+<span>WED</span>
+<span>FRI</span>
+<span>SUN</span>
+</div>
+</div>
+<div class="p-6 border-b border-border-subtle">
+<h3 class="text-xs font-mono text-gray-500 mb-4 uppercase tracking-widest">Task_Breakdown</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-obsidian border border-border-subtle p-3">
+<p class="text-[10px] text-gray-500 font-mono">COMPLETED</p>
+<p class="text-xl font-bold text-white">42</p>
+</div>
+<div class="bg-obsidian border border-border-subtle p-3">
+<p class="text-[10px] text-gray-500 font-mono">PENDING</p>
+<p class="text-xl font-bold text-primary">08</p>
+</div>
+<div class="bg-obsidian border border-border-subtle p-3">
+<p class="text-[10px] text-gray-500 font-mono">ARCHIVED</p>
+<p class="text-xl font-bold text-gray-400">126</p>
+</div>
+<div class="bg-obsidian border border-border-subtle p-3">
+<p class="text-[10px] text-gray-500 font-mono">HOURS</p>
+<p class="text-xl font-bold text-gray-400">34.5</p>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 bg-primary/5">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-primary tracking-widest">FOCUS_MODE</span>
+<span class="w-2 h-2 rounded-none bg-primary animate-ping"></span>
+</div>
+<div class="text-4xl font-mono font-bold text-white tracking-widest">00:24:59</div>
+<div class="flex gap-1 mt-4">
+<button class="flex-1 bg-primary text-white py-2 text-xs font-bold hover:bg-red-600 transition-colors">PAUSE</button>
+<button class="flex-1 border border-primary text-primary py-2 text-xs font-bold hover:bg-primary hover:text-white transition-colors">STOP</button>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>
