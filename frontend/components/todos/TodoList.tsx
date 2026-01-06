@@ -1,4 +1,4 @@
-import { type Todo } from "@/lib/validations/todo.schema"
+import { type Todo } from "@/lib/types"
 import { TodoItem } from "./TodoItem"
 
 interface TodoListProps {
