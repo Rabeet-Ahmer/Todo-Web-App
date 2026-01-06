@@ -1,179 +1,72 @@
-"""Todo business logic layer."""
-from typing import Optional
-
-from sqlmodel import select
+from typing import Optional, Sequence
+from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
-
 from app.models.todo import Todo
-from app.schemas.todo import TodoCreate, TodoUpdate
-
+from app.schemas.todo import TodoCreate, TodoUpdate, TodoStats
+from app.core.exceptions import TodoNotFoundException, TodoAccessDeniedException
 
 class TodoService:
-    """Service for Todo CRUD operations."""
-
-    async def get_todos_for_user(
-        self,
-        user_id: int,
-        session: AsyncSession,
-        skip: int = 0,
-        limit: int = 100
-    ) -> list[Todo]:
-        """
-        Get all todos for a specific user with pagination.
-
-        Args:
-            user_id: ID of the authenticated user
-            session: Async database session
-            skip: Number of records to skip (pagination)
-            limit: Maximum number of records to return
-
-        Returns:
-            List of todos belonging to the user
-        """
-        statement = (
-            select(Todo)
-            .where(Todo.user_id == user_id)
-            .offset(skip)
-            .limit(limit)
-            .order_by(Todo.updated_at.desc())
-        )
-        results = await session.exec(statement)
-        return results.all()
-
-    async def create_todo_for_user(
-        self,
-        todo_create: TodoCreate,
-        user_id: int,
-        session: AsyncSession
-    ) -> Todo:
-        """
-        Create a new todo for user.
-
-        Args:
-            todo_create: Todo creation data
-            user_id: ID of the authenticated user
-            session: Async database session
-
-        Returns:
-            Created todo with generated ID and timestamps
-        """
-        todo = Todo.model_validate(todo_create)
-        todo.user_id = user_id
-        session.add(todo)
+    @staticmethod
+    async def create_todo(session: AsyncSession, todo_in: TodoCreate, user_id: str) -> Todo:
+        db_obj = Todo.model_validate(todo_in, update={"user_id": user_id})
+        session.add(db_obj)
         await session.commit()
-        await session.refresh(todo)
-        return todo
+        await session.refresh(db_obj)
+        return db_obj
 
-    async def get_todo_by_id(
-        self,
-        todo_id: int,
-        user_id: int,
-        session: AsyncSession
-    ) -> Optional[Todo]:
-        """
-        Get a specific todo by ID (must belong to user).
+    @staticmethod
+    async def get_todos(session: AsyncSession, user_id: str) -> Sequence[Todo]:
+        statement = select(Todo).where(Todo.user_id == user_id).order_by(Todo.created_at.desc())
+        result = await session.exec(statement)
+        return result.all()
 
-        Args:
-            todo_id: ID of the todo
-            user_id: ID of the authenticated user
-            session: Async database session
+    @staticmethod
+    async def update_todo(session: AsyncSession, todo_id: int, todo_in: TodoUpdate, user_id: str) -> Optional[Todo]:
+        statement = select(Todo).where(Todo.id == todo_id, Todo.user_id == user_id)
+        result = await session.exec(statement)
+        db_obj = result.one_or_none()
+        if not db_obj:
+            # Raise exception if todo not found or user doesn't have access
+            raise TodoNotFoundException(todo_id)
 
-        Returns:
-            Todo if found and belongs to user, None otherwise
-        """
-        statement = select(Todo).where(
-            Todo.id == todo_id,
-            Todo.user_id == user_id  # Security: User owns this todo
-        )
-        results = await session.exec(statement)
-        return results.one_or_none()
+        update_data = todo_in.model_dump(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(db_obj, key, value)
 
-    async def update_todo_for_user(
-        self,
-        todo_id: int,
-        todo_update: TodoUpdate,
-        user_id: int,
-        session: AsyncSession
-    ) -> Optional[Todo]:
-        """
-        Update a todo (must belong to user).
-
-        Args:
-            todo_id: ID of the todo
-            todo_update: Partial update data
-            user_id: ID of the authenticated user
-            session: Async database session
-
-        Returns:
-            Updated todo if found and belongs to user, None otherwise
-        """
-        todo = await self.get_todo_by_id(todo_id, user_id, session)
-
-        if not todo:
-            return None
-
-        # Update fields using Pydantic v2 model_dump()
-        todo_data = todo_update.model_dump(exclude_unset=True)
-        for field, value in todo_data.items():
-            setattr(todo, field, value)
-
+        session.add(db_obj)
         await session.commit()
-        await session.refresh(todo)
-        return todo
+        await session.refresh(db_obj)
+        return db_obj
 
-    async def delete_todo_for_user(
-        self,
-        todo_id: int,
-        user_id: int,
-        session: AsyncSession
-    ) -> bool:
-        """
-        Delete a todo (must belong to user).
-
-        Args:
-            todo_id: ID of the todo
-            user_id: ID of the authenticated user
-            session: Async database session
-
-        Returns:
-            True if deleted, False if not found
-        """
-        todo = await self.get_todo_by_id(todo_id, user_id, session)
-
-        if not todo:
-            return False
-
-        await session.delete(todo)
+    @staticmethod
+    async def delete_todo(session: AsyncSession, todo_id: int, user_id: str) -> bool:
+        statement = select(Todo).where(Todo.id == todo_id, Todo.user_id == user_id)
+        result = await session.exec(statement)
+        db_obj = result.one_or_none()
+        if not db_obj:
+            # Raise exception if todo not found or user doesn't have access
+            raise TodoNotFoundException(todo_id)
+        await session.delete(db_obj)
         await session.commit()
         return True
 
-    async def toggle_todo_completion(
-        self,
-        todo_id: int,
-        user_id: int,
-        session: AsyncSession
-    ) -> Optional[Todo]:
-        """
-        Toggle todo completion status.
+    @staticmethod
+    async def get_stats(session: AsyncSession, user_id: str) -> TodoStats:
+        """Get todo statistics for the dashboard."""
+        # Count total todos
+        total_stmt = select(func.count()).select_from(Todo).where(Todo.user_id == user_id)
+        total_result = await session.exec(total_stmt)
+        total = total_result.one() or 0
 
-        Args:
-            todo_id: ID of the todo
-            user_id: ID of the authenticated user
-            session: Async database session
+        # Count completed todos
+        completed_stmt = select(func.count()).select_from(Todo).where(
+            Todo.user_id == user_id,
+            Todo.completed == True
+        )
+        completed_result = await session.exec(completed_stmt)
+        completed = completed_result.one() or 0
 
-        Returns:
-            Updated todo if found and belongs to user, None otherwise
-        """
-        todo = await self.get_todo_by_id(todo_id, user_id, session)
+        # Pending is total - completed
+        pending = total - completed
 
-        if not todo:
-            return None
-
-        todo.is_completed = not todo.is_completed
-        await session.commit()
-        await session.refresh(todo)
-        return todo
-
-
-# Create singleton instance
-todo_service = TodoService()
+        return TodoStats(total=total, pending=pending, completed=completed)

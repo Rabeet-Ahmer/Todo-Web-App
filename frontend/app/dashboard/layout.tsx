@@ -1,32 +1,30 @@
-import { Sidebar } from '@/components/dashboard/Sidebar'
-import { TopNav } from '@/components/dashboard/TopNav'
-import { DASHBOARD_NAV } from '@/lib/constants'
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/dashboard/AppSidebar"
+import { cookies } from "next/headers"
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // Mock user data - replace with actual session data from Better Auth
-  const user = {
-    id: 1,
-    email: 'user@example.com',
-    username: 'operator',
-    is_active: true,
-    created_at: '2026-01-02',
-  }
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
 
   return (
-    <div className="flex h-screen overflow-hidden bg-obsidian">
-      <Sidebar items={DASHBOARD_NAV} user={user} />
-
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <TopNav title="Dashboard" user={user} showSearch={true} />
-
-        <main className="flex-1 overflow-y-auto">
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border-subtle px-4 bg-charcoal">
+          <SidebarTrigger className="-ml-1 text-primary" />
+          <div className="h-4 w-[1px] bg-border-subtle mx-2" />
+          <h1 className="font-display text-sm font-bold uppercase tracking-widest text-white">
+            System Dashboard
+          </h1>
+        </header>
+        <main className="flex-1 overflow-y-auto p-6 bg-obsidian text-white">
           {children}
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

@@ -5,9 +5,13 @@ description = "FastAPI Tasks API with Better Auth integration"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi[standard]>=0.115.0",
-    "pydantic-settings>=2.0.0",
-    "sqlmodel>=0.0.20",
-    "python-jose[cryptography]>=3.3.0",
-    "asyncpg>=0.29.0",
+    "alembic>=1.17.2",
+    "asyncpg>=0.31.0",
+    "fastapi[standard]>=0.128.0",
+    "httpx>=0.28.1",
+    "passlib[bcrypt]>=1.7.4",
+    "pydantic-settings>=2.12.0",
+    "pyjwt>=2.10.1",
+    "python-jose[cryptography]>=3.5.0",
+    "sqlmodel>=0.0.31",
 ]

@@ -1,23 +1,28 @@
-"""Todo model owned by FastAPI with FK to Better Auth's users table."""
 from datetime import datetime
-from sqlmodel import Field, SQLModel
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
+from sqlalchemy import Boolean, Column, String
+from sqlmodel import SQLModel, Field, Relationship
+
+if TYPE_CHECKING:
+    from app.models.user import User
 
 class Todo(SQLModel, table=True):
-    """
-    Todo model owned by FastAPI.
-
-    user_id is a foreign key to Better Auth's users table.
-    FastAPI creates and manages this table.
-    """
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str = Field(index=True, max_length=200)
     description: Optional[str] = Field(default=None, max_length=1000)
-    is_completed: bool = Field(default=False)
-    user_id: int = Field(
-        foreign_key="user.id",  # References Better Auth's users table
-        index=True
+    # Map Python attribute `completed` to DB column `is_completed`
+    completed: bool = Field(
+        default=False,
+        sa_column=Column("is_completed", Boolean, default=False),
+    )
+    # Priority column: LOW, MEDIUM, HIGH
+    priority: str = Field(
+        default="MEDIUM",
+        sa_column=Column(String(10), default="MEDIUM", server_default="MEDIUM"),
     )
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    user_id: str = Field(foreign_key="user.id", index=True)
+    user: "User" = Relationship(back_populates="todos")

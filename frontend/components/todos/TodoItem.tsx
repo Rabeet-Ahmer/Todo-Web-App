@@ -1,51 +1,90 @@
-/**
- * TodoItem Component.
- *
- * Displays a single todo with completion status.
- * This is a Server Component by default.
- */
+"use client";
 
-import { Todo } from '@/lib/types'
+import { type Todo } from "@/lib/types";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
+import { deleteTodoAction, toggleTodoAction } from "@/actions/todo.actions";
+import { startTransition, useOptimistic, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 interface TodoItemProps {
-  todo: Todo
-  onToggle?: () => void
+  todo: Todo;
 }
 
-/**
- * TodoItem Server Component.
- *
- * Renders a single todo item with checkbox and details.
- */
-export default function TodoItem({ todo }: TodoItemProps) {
+export function TodoItem({ todo }: TodoItemProps) {
+  const [optimisticTodo, setOptimisticTodo] = useOptimistic(todo, (current, completed: boolean) => ({
+    ...current,
+    completed
+  }));
+
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleToggle = async () => {
+    const nextCompleted = !optimisticTodo.completed;
+
+    // React 19: optimistic updates must be inside a transition or action
+    startTransition(() => {
+      setOptimisticTodo(nextCompleted);
+    });
+
+    await toggleTodoAction(todo.id, nextCompleted);
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    await deleteTodoAction(todo.id);
+  };
+
   return (
-    <li className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-      <div className="flex-shrink-0">
-        <input
-          type="checkbox"
-          checked={todo.is_completed}
-          disabled
-          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-not-allowed opacity-50"
-          aria-label={`Mark "${todo.title}" as ${todo.is_completed ? 'incomplete' : 'complete'}`}
+    <Card className="border-border-subtle bg-charcoal hover:border-primary/50 transition-colors group">
+      <CardContent className="p-4 flex items-center gap-4">
+        <Checkbox
+          checked={optimisticTodo.completed}
+          onCheckedChange={handleToggle}
+          className="border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
         />
-      </div>
-
-      <div className="flex-grow min-w-0">
-        <h3 className={`text-lg font-medium ${todo.is_completed ? 'line-through text-gray-400' : 'text-gray-900'}`}>
-          {todo.title}
-        </h3>
-
-        {todo.description && (
-          <p className={`mt-1 text-sm ${todo.is_completed ? 'text-gray-400' : 'text-gray-600'}`}>
-            {todo.description}
-          </p>
-        )}
-
-        <p className="mt-2 text-xs text-gray-400">
-          Created: {new Date(todo.created_at).toLocaleDateString()}
-          {todo.updated_at !== todo.created_at && ` • Updated: ${new Date(todo.updated_at).toLocaleDateString()}`}
-        </p>
-      </div>
-    </li>
+        <div className="flex-1 space-y-1">
+          <div className="flex items-center gap-2">
+            <h3 className={cn(
+              "text-sm font-bold uppercase tracking-wider",
+              optimisticTodo.completed ? "text-gray-500 line-through" : "text-white"
+            )}>
+              {optimisticTodo.title}
+            </h3>
+            <Badge
+              variant="outline"
+              className={cn(
+                "text-[10px] font-mono px-2 py-0.5 rounded-none uppercase tracking-widest",
+                optimisticTodo.priority === "HIGH"
+                  ? "border-primary text-primary"
+                  : optimisticTodo.priority === "MEDIUM"
+                  ? "border-yellow-500 text-yellow-400"
+                  : "border-blue-500 text-blue-400"
+              )}
+            >
+              {optimisticTodo.priority} Priority
+            </Badge>
+          </div>
+          {optimisticTodo.description && (
+            <p className="text-xs text-gray-400 font-mono line-clamp-1">
+              {optimisticTodo.description}
+            </p>
+          )}
+          <div className="text-[10px] text-gray-500 font-mono">
+            ID: {optimisticTodo.id} | Created: {new Date(optimisticTodo.created_at).toISOString().slice(0, 10)}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="text-[10px] text-red-500 font-mono hover:text-red-300 disabled:opacity-50"
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </button>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
