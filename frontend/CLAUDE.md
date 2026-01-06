@@ -63,12 +63,12 @@ export default function Page() {
 **Example Structure:**
 ```
 app/
-├── (auth)/                    # Auth route group (no URL segment)
+├── auth/                    # Auth group (no URL segment)
 │   ├── login/
 │   │   └── page.tsx
 │   └── register/
 │       └── page.tsx
-├── (dashboard)/               # Dashboard route group
+├── dashboard/               # Dashboard group
 │   ├── layout.tsx
 │   ├── todos/
 │   │   ├── page.tsx
@@ -92,6 +92,7 @@ app/
 - No custom CSS files unless for animations (`styles/animations.css`)
 - Use `cn()` utility from `lib/utils.ts` for class merging
 - shadcn/ui primitives in `components/ui/`
+- **shadcn/ui is initialized** - Use Shadcn MCP for components
 - Design tokens via Tailwind config, not magic numbers
 
 **Utility Function (lib/utils.ts):**

@@ -1,31 +1,22 @@
-/** Shared TypeScript types between frontend and backend. */
-
 export interface User {
-  id: number
+  id: string
   email: string
-  email_verified: boolean
   name?: string
   image?: string
-  created_at: string
-  updated_at: string
 }
 
 export interface Todo {
   id: number
   title: string
-  description?: string | null
-  is_completed: boolean
-  user_id: number
+  description?: string
+  completed: boolean
+  priority: "LOW" | "MEDIUM" | "HIGH"
+  user_id: string
   created_at: string
   updated_at: string
 }
 
 export interface ApiError {
   detail: string
-  status_code: number
-}
-
-export interface PaginationParams {
-  skip: number
-  limit: number
+  status_code?: number
 }

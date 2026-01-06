@@ -208,3 +208,10 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Active Technologies
+- TypeScript 5.x with Next.js 16.1.1 (App Router), React 19.2.3 (001-frontend-ui)
+- Client-side state for UI preferences (sidebar collapsed/expanded state using localStorage or cookies) (001-frontend-ui)
+
+## Recent Changes
+- 001-frontend-ui: Added TypeScript 5.x with Next.js 16.1.1 (App Router), React 19.2.3
