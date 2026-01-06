@@ -5,7 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { deleteTodoAction, toggleTodoAction } from "@/actions/todo.actions";
-import { useOptimistic, useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 interface TodoItemProps {
   todo: Todo;
@@ -20,8 +21,14 @@ export function TodoItem({ todo }: TodoItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleToggle = async () => {
-    setOptimisticTodo(!optimisticTodo.completed);
-    await toggleTodoAction(todo.id, !optimisticTodo.completed);
+    const nextCompleted = !optimisticTodo.completed;
+
+    // React 19: optimistic updates must be inside a transition or action
+    startTransition(() => {
+      setOptimisticTodo(nextCompleted);
+    });
+
+    await toggleTodoAction(todo.id, nextCompleted);
   };
 
   const handleDelete = async () => {
@@ -45,6 +52,19 @@ export function TodoItem({ todo }: TodoItemProps) {
             )}>
               {optimisticTodo.title}
             </h3>
+            <Badge
+              variant="outline"
+              className={cn(
+                "text-[10px] font-mono px-2 py-0.5 rounded-none uppercase tracking-widest",
+                optimisticTodo.priority === "HIGH"
+                  ? "border-primary text-primary"
+                  : optimisticTodo.priority === "MEDIUM"
+                  ? "border-yellow-500 text-yellow-400"
+                  : "border-blue-500 text-blue-400"
+              )}
+            >
+              {optimisticTodo.priority} Priority
+            </Badge>
           </div>
           {optimisticTodo.description && (
             <p className="text-xs text-gray-400 font-mono line-clamp-1">
@@ -52,7 +72,7 @@ export function TodoItem({ todo }: TodoItemProps) {
             </p>
           )}
           <div className="text-[10px] text-gray-500 font-mono">
-            ID: {optimisticTodo.id} | Created: {new Date(optimisticTodo.created_at).toLocaleDateString()}
+            ID: {optimisticTodo.id} | Created: {new Date(optimisticTodo.created_at).toISOString().slice(0, 10)}
           </div>
         </div>
         <div className="flex flex-col gap-2">

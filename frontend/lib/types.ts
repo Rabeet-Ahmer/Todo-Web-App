@@ -10,6 +10,7 @@ export interface Todo {
   title: string
   description?: string
   completed: boolean
+  priority: "LOW" | "MEDIUM" | "HIGH"
   user_id: string
   created_at: string
   updated_at: string

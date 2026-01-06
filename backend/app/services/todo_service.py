@@ -1,8 +1,8 @@
 from typing import Optional, Sequence
-from sqlmodel import select
+from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.models.todo import Todo
-from app.schemas.todo import TodoCreate, TodoUpdate
+from app.schemas.todo import TodoCreate, TodoUpdate, TodoStats
 from app.core.exceptions import TodoNotFoundException, TodoAccessDeniedException
 
 class TodoService:
@@ -49,3 +49,24 @@ class TodoService:
         await session.delete(db_obj)
         await session.commit()
         return True
+
+    @staticmethod
+    async def get_stats(session: AsyncSession, user_id: str) -> TodoStats:
+        """Get todo statistics for the dashboard."""
+        # Count total todos
+        total_stmt = select(func.count()).select_from(Todo).where(Todo.user_id == user_id)
+        total_result = await session.exec(total_stmt)
+        total = total_result.one() or 0
+
+        # Count completed todos
+        completed_stmt = select(func.count()).select_from(Todo).where(
+            Todo.user_id == user_id,
+            Todo.completed == True
+        )
+        completed_result = await session.exec(completed_stmt)
+        completed = completed_result.one() or 0
+
+        # Pending is total - completed
+        pending = total - completed
+
+        return TodoStats(total=total, pending=pending, completed=completed)

@@ -48,6 +48,33 @@ components:
       required:
         - title
 
+    TodoUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 500
+        completed:
+          type: boolean
+
+    TodoStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of todos
+        pending:
+          type: integer
+          description: Number of incomplete todos
+        completed:
+          type: integer
+          description: Number of completed todos
+      required:
+        - total
+        - pending
+        - completed
+
     Error:
       type: object
       properties:
@@ -118,7 +145,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Todo'
+              $ref: '#/components/schemas/TodoUpdate'
       responses:
         '200':
           content:
@@ -131,3 +158,18 @@ paths:
       responses:
         '204':
           description: Deleted successfully
+        '404':
+          description: Not found
+
+  /users/me/todos/stats:
+    get:
+      summary: Get dashboard statistics for the current user
+      responses:
+        '200':
+          description: Todo statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoStats'
+        '401':
+          description: Unauthorized

@@ -15,7 +15,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 # from app.db.session import get_session
 
 # Shared settings with Better Auth
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+# Prefer explicit JWT_SECRET_KEY but gracefully fall back to BETTER_AUTH_SECRET
+SECRET_KEY = os.getenv("JWT_SECRET_KEY") or os.getenv("BETTER_AUTH_SECRET")
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 BETTER_AUTH_URL = os.getenv("BETTER_AUTH_URL", "http://localhost:3000")
 
@@ -32,6 +33,13 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    if not SECRET_KEY:
+        # Misconfiguration: backend cannot validate tokens without a secret
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="JWT secret key is not configured on the backend",
+        )
+
     token = credentials.credentials
 
     try:
@@ -40,7 +48,7 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM],
-            options={"verify_aud": False} # Better Auth aud might vary
+            options={"verify_aud": False}  # Better Auth aud might vary
         )
         return payload
     except JWTError as e:

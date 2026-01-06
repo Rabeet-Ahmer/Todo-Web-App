@@ -14,7 +14,7 @@ export default function TodoNotFound() {
         The specified task ID does not exist in the current operational scope.
       </p>
       <Link
-        href="/todos"
+        href="/dashboard/todos"
         className="inline-flex items-center gap-2 border border-primary bg-transparent px-8 py-3 font-bold text-primary uppercase tracking-widest transition-colors hover:bg-primary hover:text-white"
       >
         <ArrowLeft className="size-4" />

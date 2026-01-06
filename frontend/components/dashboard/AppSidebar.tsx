@@ -31,7 +31,7 @@ const navItems = [
   },
   {
     title: "Tasks",
-    url: "/todos",
+    url: "/dashboard/todos",
     icon: ListTodo,
   },
 ]

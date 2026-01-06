@@ -18,7 +18,7 @@ export function TodoDetail({ todo }: TodoDetailProps) {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Link
-        href="/todos"
+        href="/dashboard/todos"
         className="inline-flex items-center gap-2 text-xs font-mono text-gray-400 hover:text-primary transition-colors uppercase tracking-widest"
       >
         <ArrowLeft className="size-3" />

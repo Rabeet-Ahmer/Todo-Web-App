@@ -1,26 +1,69 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Activity, CheckCircle2, Circle, Clock } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Activity, CheckCircle2, Clock } from "lucide-react"
+import { requireAuth } from "@/actions/auth.actions"
+import { issueBackendJwt } from "@/lib/backend-jwt"
 
-export default function DashboardPage() {
+type TodoStats = {
+  total: number
+  pending: number
+  completed: number
+}
+
+export default async function DashboardPage() {
+  // Ensure user is authenticated
+  const session = await requireAuth()
+  const userId = (session as any)?.user?.id as string | undefined
+
+  if (!userId) {
+    throw new Error("Authenticated session is missing user id")
+  }
+
+  const token = await issueBackendJwt(userId)
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
+
+  let statsData: TodoStats = {
+    total: 0,
+    pending: 0,
+    completed: 0,
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/users/me/todos/stats`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    })
+
+    if (response.ok) {
+      statsData = await response.json()
+    } else {
+      console.error("Failed to fetch todo stats:", await response.text())
+    }
+  } catch (error) {
+    console.error("Failed to fetch todo stats:", error)
+  }
+
   const stats = [
     {
       title: "Total Operations",
-      description: "Baseline tasks",
-      value: "42",
+      description: "All tracked objectives",
+      value: statsData.total.toString(),
       icon: Activity,
       color: "text-primary",
     },
     {
       title: "Tactical Execution",
       description: "Missions completed",
-      value: "38",
+      value: statsData.completed.toString(),
       icon: CheckCircle2,
       color: "text-green-500",
     },
     {
       title: "Active Engagements",
       description: "Immediate priority",
-      value: "4",
+      value: statsData.pending.toString(),
       icon: Clock,
       color: "text-blue-500",
     },

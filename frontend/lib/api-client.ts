@@ -1,37 +1,15 @@
 /**
  * API Client for FastAPI Backend
- * Handles token injection from Better Auth session
+ * Handles token injection from Better Auth JWT (jwt plugin)
  */
 
-// Import toast for notifications
-import { toast } from 'sonner';
-
 async function getAuthToken(): Promise<string | null> {
-    if (typeof window === "undefined") {
-        // Server side: Extract from cookies
-        const { cookies } = await import("next/headers");
-        const cookieStore = await cookies();
-        const sessionToken = cookieStore.get("better-auth.session_token");
-        return sessionToken?.value || null;
-    } else {
-        // Client side: Better Auth sets a cookie that the browser sends automatically,
-        // but for Bearer token auth in FastAPI, we might need to extract it.
-        // Better Auth stores the token in localStorage or cookies depending on config.
-        // Assuming we use the cookies for consistency.
-        const name = "better-auth.session_token=";
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return null;
-    }
+    // IMPORTANT: better-auth.session_token is NOT a JWT.
+    // For FastAPI, we need the JWT issued by the Better Auth jwt plugin.
+    // For now, we don't have a safe way to fetch it on the server,
+    // so this function returns null and FastAPI endpoints should be tested
+    // with auth temporarily disabled or with a manual token.
+    return null;
 }
 
 export async function apiRequest<T>(
@@ -48,38 +26,18 @@ export async function apiRequest<T>(
 
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
-    try {
-        const response = await fetch(`${baseUrl}${endpoint}`, {
-            ...options,
-            headers,
-        });
+    const response = await fetch(`${baseUrl}${endpoint}`, {
+        ...options,
+        headers,
+    });
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ detail: "API request failed" }));
-            const errorMessage = errorData.detail || "API request failed";
-
-            // Show toast notification for API failures
-            toast.error(`API Error: ${errorMessage}`, {
-                description: `Failed to access ${endpoint}`,
-                duration: 5000,
-            });
-
-            throw new Error(errorMessage);
-        }
-
-        return response.json();
-    } catch (error) {
-        // Handle network errors or other exceptions
-        const errorMessage = error instanceof Error ? error.message : "Network error occurred";
-
-        // Show toast notification for network errors
-        toast.error(`Network Error: ${errorMessage}`, {
-            description: `Failed to connect to ${endpoint}`,
-            duration: 5000,
-        });
-
-        throw error;
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: "API request failed" }));
+        const errorMessage = errorData.detail || "API request failed";
+        throw new Error(errorMessage);
     }
+
+    return response.json();
 }
 
 export const api = {
