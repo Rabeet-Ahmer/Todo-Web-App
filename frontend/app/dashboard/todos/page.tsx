@@ -7,6 +7,9 @@ import { requireAuth } from "@/actions/auth.actions"
 import { createTodoAction } from "@/actions/todo.actions"
 import { issueBackendJwt } from "@/lib/backend-jwt"
 
+// Force dynamic rendering since we use headers() for auth
+export const dynamic = 'force-dynamic'
+
 export default async function TodosPage() {
   const session = await requireAuth()
   const userId = (session as any)?.user?.id as string | undefined

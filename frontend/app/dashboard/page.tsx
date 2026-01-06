@@ -3,6 +3,9 @@ import { Activity, CheckCircle2, Clock } from "lucide-react"
 import { requireAuth } from "@/actions/auth.actions"
 import { issueBackendJwt } from "@/lib/backend-jwt"
 
+// Force dynamic rendering since we use headers() for auth
+export const dynamic = 'force-dynamic'
+
 type TodoStats = {
   total: number
   pending: number
