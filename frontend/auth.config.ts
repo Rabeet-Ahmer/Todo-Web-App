@@ -1,4 +1,3 @@
-"""Better Auth configuration for frontend authentication."""
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 
