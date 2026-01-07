@@ -12,11 +12,19 @@ interface HeroProps {
 export function Hero({ title, subtitle, primaryCta, secondaryCta, backgroundImage }: HeroProps) {
   return (
     <section className="relative flex flex-col justify-center p-8 md:p-16 lg:p-24 min-h-[600px] border-b border-border-sharp animate-fade-in">
-      {backgroundImage && (
-        <div className="absolute inset-0 opacity-10">
-          <div className="bg-grid-pattern w-full h-full" />
-        </div>
-      )}
+      {/* SVG Map Background */}
+      <div className="absolute inset-0 opacity-30">
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: "url('/ڪراچي Karachi (1).svg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+      </div>
+
       <div className="relative z-10 animate-slide-up">
         <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tighter mb-6 uppercase">
           {title}
