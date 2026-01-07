@@ -61,6 +61,38 @@
   --radius-3xl: 0px;
   --radius-4xl: 0px;
   --radius-full: 0px;
+
+  /* Custom Animations */
+  --animate-slide-up: slide-up 0.3s ease-out;
+  --animate-slide-down: slide-down 0.3s ease-out;
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-scale-in: scale-in 0.15s ease-out;
+  --animate-shimmer: shimmer 2s infinite;
+
+  @keyframes slide-up {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slide-down {
+    0% { opacity: 0; transform: translateY(-8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes scale-in {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
 
 :root {
@@ -136,6 +168,37 @@
 
   .sharp-border {
     border: 1px solid #2a2a2a;
+  }
+
+  /* Transition utilities */
+  .transition-border {
+    transition-property: border-color;
+    transition-timing-function: ease-out;
+    transition-duration: 150ms;
+  }
+
+  .transition-transform {
+    transition-property: transform;
+    transition-timing-function: ease-out;
+    transition-duration: 150ms;
+  }
+
+  .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: ease-out;
+    transition-duration: 150ms;
+  }
+
+  .transition-all-fast {
+    transition-property: all;
+    transition-timing-function: ease-out;
+    transition-duration: 150ms;
+  }
+
+  .transition-all-medium {
+    transition-property: all;
+    transition-timing-function: ease-out;
+    transition-duration: 200ms;
   }
 }
 

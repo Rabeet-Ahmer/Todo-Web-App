@@ -21,7 +21,7 @@ export default async function DashboardLayout({
             System Dashboard
           </h1>
         </header>
-        <main className="flex-1 overflow-y-auto p-6 bg-obsidian text-white">
+        <main className="flex-1 overflow-y-auto p-6 bg-obsidian text-white animate-fade-in">
           {children}
         </main>
       </SidebarInset>

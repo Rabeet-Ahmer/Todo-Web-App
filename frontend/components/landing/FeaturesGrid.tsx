@@ -23,7 +23,13 @@ export function FeaturesGrid({ features, columns = { mobile: 1, tablet: 2, deskt
     <section className={cn("p-8 md:p-16", className)}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {features.map((feature, index) => (
-          <FeatureCard key={index} {...feature} />
+          <div
+            key={index}
+            className="animate-slide-up"
+            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'both' }}
+          >
+            <FeatureCard {...feature} />
+          </div>
         ))}
       </div>
     </section>

@@ -36,10 +36,10 @@ export function Header({ navItems, user, showAuth = false, className }: HeaderPr
               key={item.href}
               href={item.href}
               className={cn(
-                "text-xs font-mono uppercase tracking-widest transition-colors",
+                "text-xs font-mono uppercase tracking-widest transition-all-fast relative after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all-fast hover:after:w-full",
                 item.active
                   ? "text-primary"
-                  : "text-gray-400 hover:text-primary"
+                  : "text-gray-400 hover:text-white"
               )}
             >
               {item.label}
@@ -48,7 +48,7 @@ export function Header({ navItems, user, showAuth = false, className }: HeaderPr
 
           {showAuth && !user && (
             <div className="flex items-center gap-3">
-              <Button asChild variant="ghost" size="sm" className="uppercase tracking-widest font-mono">
+              <Button asChild variant="ghost" size="sm" className="uppercase tracking-widest font-mono hover:text-white">
                 <Link href="/login">Login</Link>
               </Button>
               <Button asChild variant="default" size="sm" className="uppercase tracking-widest bg-primary hover:bg-red-600 font-bold">

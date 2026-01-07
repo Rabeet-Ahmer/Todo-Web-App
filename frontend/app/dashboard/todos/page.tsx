@@ -45,9 +45,9 @@ export default async function TodosPage() {
   const completeTodos = todos.filter((todo) => todo.completed)
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="animate-slide-down">
           <h2 className="text-2xl font-bold text-white uppercase tracking-tight font-display">
             Active Objectives
           </h2>
@@ -117,7 +117,7 @@ export default async function TodosPage() {
 function TodoListWrapper({ todos }: { todos: Todo[] }) {
   if (!todos || todos.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 border border-dashed border-border-subtle bg-charcoal/50">
+      <div className="flex flex-col items-center justify-center p-12 border border-dashed border-border-subtle bg-charcoal/50 animate-fade-in">
         <p className="text-gray-500 font-mono text-xs uppercase tracking-widest">
           No objectives found in database
         </p>

@@ -16,20 +16,20 @@ interface CTASectionProps {
 
 export function CTASection({ headline, description, cta, emailCapture, className }: CTASectionProps) {
   return (
-    <section className={cn("bg-primary p-8 md:p-16 border-y border-border-sharp", className)}>
+    <section className={cn("bg-primary p-8 md:p-16 border-y border-border-sharp animate-fade-in", className)}>
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4 uppercase tracking-wider text-black">
+        <h2 className="text-3xl md:text-5xl font-bold mb-4 uppercase tracking-wider text-black animate-slide-up">
           {headline}
         </h2>
-        <p className="text-black/80 font-mono text-sm md:text-base mb-8 max-w-2xl mx-auto">
+        <p className="text-black/80 font-mono text-sm md:text-base mb-8 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '100ms', animationFillMode: 'both' }}>
           {description}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
           {emailCapture && (
             <input
               type="email"
               placeholder="ENTER EMAIL"
-              className="px-6 py-3 bg-black text-white border border-black font-mono uppercase tracking-wider placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
+              className="px-6 py-3 bg-black text-white border border-black font-mono uppercase tracking-wider placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white transition-all-fast"
             />
           )}
           <Button asChild variant={cta.variant === 'secondary' ? 'outline' : 'default'} className="uppercase tracking-widest bg-black text-white hover:bg-black/80 font-bold border-black">
