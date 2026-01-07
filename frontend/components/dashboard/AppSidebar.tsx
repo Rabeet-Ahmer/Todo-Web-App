@@ -9,6 +9,8 @@ import {
   User,
   Shield,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { signOut } from "@/lib/auth-client"
 
 import {
   Sidebar,
@@ -50,6 +52,22 @@ const systemItems = [
 ]
 
 export function AppSidebar() {
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    try {
+      await signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            router.push("/")
+          },
+        },
+      })
+    } catch (error) {
+      console.error("Failed to sign out:", error)
+    }
+  }
+
   return (
     <Sidebar collapsible="icon" className="border-r border-border-subtle bg-charcoal">
       <SidebarHeader className="h-16 flex items-center justify-center border-b border-border-subtle">
@@ -114,7 +132,10 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border-subtle p-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="w-full justify-start gap-3 hover:bg-destructive/10 hover:text-destructive text-gray-400 font-mono text-xs uppercase tracking-wider h-11 px-4">
+            <SidebarMenuButton
+              onClick={handleSignOut}
+              className="w-full justify-start gap-3 hover:bg-destructive/10 hover:text-destructive text-gray-400 font-mono text-xs uppercase tracking-wider h-11 px-4 transition-all cursor-pointer"
+            >
               <LogOut className="size-4" />
               <span>Terminate Session</span>
             </SidebarMenuButton>
