@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { signOut } from "@/lib/auth-client"
+import Link from "next/link"
 
 import {
   Sidebar,
@@ -94,10 +95,10 @@ export function AppSidebar() {
                     tooltip={item.title}
                     className="hover:bg-primary/10 hover:text-primary text-gray-400 font-mono text-xs uppercase tracking-wider h-11 px-4 transition-all"
                   >
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon className="size-4" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -118,10 +119,10 @@ export function AppSidebar() {
                     tooltip={item.title}
                     className="hover:bg-primary/10 hover:text-primary text-gray-400 font-mono text-xs uppercase tracking-wider h-11 px-4 transition-all"
                   >
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon className="size-4" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
