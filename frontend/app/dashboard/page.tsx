@@ -157,7 +157,7 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                <div className="h-[1px] bg-border-subtle w-full" />
+                <div className="h-px bg-border-subtle w-full" />
               </>
             )}
 
@@ -195,7 +195,7 @@ export default async function DashboardPage() {
             {/* Empty State */}
             {todos.length === 0 && (
               <>
-                <div className="h-[1px] bg-border-subtle w-full" />
+                <div className="h-px bg-border-subtle w-full" />
                 <div className="flex gap-4 items-start opacity-70">
                   <div className="mt-1 h-3 w-3 bg-gray-600" />
                   <div>

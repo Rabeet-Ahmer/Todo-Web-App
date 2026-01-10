@@ -68,7 +68,7 @@ export function UserProfile({ user }: UserProfileProps) {
       </div>
 
       {/* Divider */}
-      <div className="h-[1px] bg-border-subtle w-full" />
+      <div className="h-px bg-border-subtle w-full" />
 
       {/* Actions */}
         {/* <Button

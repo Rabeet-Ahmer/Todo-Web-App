@@ -81,14 +81,14 @@ export function AppSidebar({ user }: AppSidebarProps) {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border-subtle bg-charcoal">
+    <Sidebar collapsible="icon" className="z-20 border-r border-border-subtle bg-charcoal">
       <SidebarHeader className="h-16 flex items-center justify-center border-b border-border-subtle">
         <div className="flex items-center gap-2 px-4 w-full">
           <div className="h-8 w-8 bg-primary flex items-center justify-center font-bold text-white shrink-0">
             Σ
           </div>
           <span className="font-display font-bold uppercase tracking-widest text-white truncate group-data-[collapsible=icon]:hidden">
-            Specify<span className="text-primary">+</span>
+            Tasks<span className="text-primary">+</span>
           </span>
         </div>
       </SidebarHeader>

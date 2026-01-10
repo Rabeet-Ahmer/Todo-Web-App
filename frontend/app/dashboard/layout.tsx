@@ -25,9 +25,9 @@ export default async function DashboardLayout({
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar user={user} />
       <SidebarInset>
-        <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b border-border-subtle px-4 bg-charcoal">
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b border-border-subtle px-4 bg-charcoal">
           <SidebarTrigger className="-ml-1 text-primary" />
-          <div className="h-4 w-[1px] bg-border-subtle mx-2" />
+          <div className="h-4 w-px bg-border-subtle mx-2" />
           <h1 className="font-display text-sm font-bold uppercase tracking-widest text-white">
             System Dashboard
           </h1>
